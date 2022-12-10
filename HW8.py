@@ -12,27 +12,27 @@ def get_restaurant_data(db_filename):
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+ db_filename)
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) as row_count FROM restaurants")
-    row_count = cur.fetchall()[0][0]
+    cur.execute("SELECT COUNT(*) as row_number FROM restaurants")
+    row_number = cur.fetchall()[0][0]
     restaurants_lst = []
 
-    for x in range(row_count):
+    for x in range(row_number):
         dict = {}
-        cur.execute("SELECT name, category_id, building_id, rating FROM restaurants")
+        cur.execute("SELECT restaurants.name, restaurants.category, restaurants.building, restaurants.rating FROM restaurants")
         data = cur.fetchall()[x]
         dict['name'] = restaurant[0]
         dict['category'] = restaurant[1]
         dict['building'] = restaurant[2]
         dict['rating'] = restaurant[3]
 
-        cur.execute("SELECT category FROM categories WHERE id = ?", (dict["category"],))
-        d["category"] = cur.fetchall()[0][0]
-        cur.execute("SELECT building FROM buildings WHERE id = ?", (dict["building"],))
-        d["building"] = cur.fetchall()[0][0]
-
+        cur.execute("SELECT category FROM restaurants.categories WHERE id = ?", (dict["category"],))
+        dict["category"] = cur.fetchall()[0][0]
+        cur.execute("SELECT building FROM restaurants.buildings WHERE id = ?", (dict["building"],))
+        dict["building"] = cur.fetchall()[0][0]
         restaurants_lst.append(dict)
 
     return restaurants_lst
+
 
 def barchart_restaurant_categories(db_filename):
     """
@@ -76,6 +76,7 @@ def barchart_restaurant_categories(db_filename):
     plt.show()
 
     return sorted_category_dict
+
 
 #EXTRA CREDIT
 def highest_rated_category(db_filename):#Do this through DB as well
