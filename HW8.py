@@ -89,6 +89,9 @@ def highest_rated_category(db_filename):#Do this through DB as well
 
 #Try calling your functions here
 def main():
+    db_filename = "South_U_Restaurants.db"
+    get_restaurant_data(db_filename)
+    barchart_restaurant_categories(db_filename)
     pass
 
 class TestHW8(unittest.TestCase):
